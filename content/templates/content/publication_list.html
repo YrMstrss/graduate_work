@@ -1,0 +1,16 @@
+{% extends 'content/base.html' %}
+
+{% block content %}
+    <div class="my-3 p-3 bg-body rounded shadow-sm">
+        <h4 class="border-bottom pb-2 mb-0">Лента</h4>
+        {% for object in object_list %}
+            <div class="d-flex text-body-secondary pt-3">
+                <p class="pb-3 mb-0 lh-sm border-bottom">
+                    <strong><a href="#"
+                               class="d-block text-gray-dark">{{ object }}</a></strong>
+                    {{ object.content | truncatechars:130 }}
+                </p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
