@@ -1,0 +1,15 @@
+{% extends 'content/base.html' %}
+
+{% block content %}
+    <div class="my-3 p-3 bg-body rounded shadow-sm">
+        <h4 class="border-bottom pb-2 mb-0">Мои подписки</h4>
+        {% for subscription in subscriptions %}
+            <div class="d-flex text-body-secondary pt-3">
+                <p class="pb-3 mb-0 lh-sm border-bottom">
+                    <strong><a href="#"
+                               class="d-block text-gray-dark">{{ subscription }}</a></strong>
+                </p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
