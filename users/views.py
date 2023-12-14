@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import CreateView, UpdateView, ListView
+from django.views.generic import CreateView, UpdateView, ListView, DetailView
 
 from users.forms import UserRegisterForm, UserProfileChangeForm
 from users.models import User
@@ -15,14 +15,19 @@ class RegisterView(CreateView):
     success_url = reverse_lazy('home')
 
 
-class ProfileView(LoginRequiredMixin, UpdateView):
+class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     model = User
     form_class = UserProfileChangeForm
-    template_name = 'users/profile.html'
-    success_url = reverse_lazy('home')
 
     def get_object(self, queryset=None):
         return self.request.user
+
+    def get_success_url(self):
+        return reverse_lazy('user:profile-view', args=[self.object.pk])
+
+
+class ProfileDetailView(LoginRequiredMixin, DetailView):
+    model = User
 
 
 class UserSubscribeView(View):
