@@ -1,0 +1,19 @@
+{% extends 'content/base.html' %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <img src="../../../media/{{ object.avatar }}" width="200" height="222" class="rounded float-start mt-4"
+                 alt="...">
+            <div class="col-4">
+                <h1 class="mt-4 ml-4">  {{ object.first_name }} {{ object.last_name }}</h1>
+                <ul>
+                    <li>{{ object.birthday }}</li>
+                    <li>{{ object.city }}</li>
+                    <li>{{ object.phone }}</li>
+                </ul>
+                <a class="btn btn-primary ml-4" href="{% url 'user:profile-update' %}">Редактировать профиль</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
