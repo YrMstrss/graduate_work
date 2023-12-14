@@ -1,5 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic import CreateView, UpdateView
 
 from users.forms import UserRegisterForm, UserProfileChangeForm
@@ -21,3 +23,16 @@ class ProfileView(LoginRequiredMixin, UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user
+
+
+class UserSubscribeView(View):
+    def get(self, request, pk):
+        author = User.objects.get(pk=pk)
+        user = self.request.user
+
+        if author in user.subscriptions.all():
+            user.subscriptions.remove(author)
+        else:
+            user.subscriptions.add(author)
+
+        return redirect('users:profile')
