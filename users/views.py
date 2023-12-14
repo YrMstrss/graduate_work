@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import CreateView, UpdateView
+from django.views.generic import CreateView, UpdateView, ListView
 
 from users.forms import UserRegisterForm, UserProfileChangeForm
 from users.models import User
@@ -36,3 +36,14 @@ class UserSubscribeView(View):
             user.subscriptions.add(author)
 
         return redirect('users:profile')
+
+
+class SubscriptionListView(ListView):
+    template_name = 'users/subscriptions.html'
+
+    def get_queryset(self, **kwargs):
+        user = self.request.user
+
+        subscriptions = user.subscriptions.all()
+
+        return subscriptions
