@@ -13,6 +13,8 @@ class User(AbstractUser):
 
     token = models.CharField(max_length=4, default=None, verbose_name='токен', **NULLABLE)
 
+    subscriptions = models.ManyToManyField('User', verbose_name='подписки', **NULLABLE)
+
     USERNAME_FIELD = 'phone'
     REQUIRED_FIELDS = []
 
