@@ -13,7 +13,8 @@
                         <div class="form-floating">
                             {% csrf_token %}
                             {{ form.as_p }}
-                            <button type="submit" class="btn btn-success">Войти</button>
+                            Нет аккаунта? <a href="{% url 'user:register' %}">Зарегистрироваться</a>
+                            <p><button type="submit" class="btn btn-success">Войти</button></p>
                         </div>
                     </div>
                 </div>
