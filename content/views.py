@@ -1,5 +1,5 @@
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, CreateView, ListView, UpdateView
+from django.views.generic import TemplateView, CreateView, ListView, UpdateView, DetailView
 
 from content.forms import PublicationForm
 from content.models import Publication
@@ -24,6 +24,18 @@ class PublicationCreateView(CreateView):
 
 class PublicationListView(ListView):
     model = Publication
+
+
+class PublicationDetailView(DetailView):
+    model = Publication
+
+    def get_object(self, queryset=None):
+
+        self.object = super().get_object(queryset)
+        self.object.views += 1
+        self.object.save()
+
+        return self.object
 
 
 class PublicationUpdateView(UpdateView):

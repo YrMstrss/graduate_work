@@ -6,7 +6,7 @@
         {% for object in object_list %}
             <div class="d-flex text-body-secondary pt-3">
                 <p class="pb-3 mb-0 lh-sm border-bottom">
-                    <strong><a href="#"
+                    <strong><a href="{% url 'publication:publication-detail' object.pk %}"
                                class="d-block text-gray-dark">{{ object }}</a></strong>
                     {{ object.content }}
                 </p>
