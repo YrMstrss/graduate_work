@@ -4,6 +4,7 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import CreateView, UpdateView, ListView, DetailView
 
+from content.models import Publication
 from users.forms import UserRegisterForm, UserProfileChangeForm
 from users.models import User
 
@@ -28,6 +29,14 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
 
 class ProfileDetailView(LoginRequiredMixin, DetailView):
     model = User
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        user = self.object
+        posts = Publication.objects.filter(author=user)
+        context['posts'] = posts
+
+        return context
 
 
 class UserSubscribeView(View):
