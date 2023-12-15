@@ -14,6 +14,13 @@ class PublicationCreateView(CreateView):
     form_class = PublicationForm
     success_url = reverse_lazy('home')
 
+    def form_valid(self, form):
+        self.object = form.save()
+        self.object.author = self.request.user
+        self.object.save()
+
+        return super().form_valid(form)
+
 
 class PublicationListView(ListView):
     model = Publication
