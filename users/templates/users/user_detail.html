@@ -12,7 +12,11 @@
                     <li>{{ object.city }}</li>
                     <li>{{ object.phone }}</li>
                 </ul>
-                <a class="btn btn-primary ml-4" href="{% url 'user:profile-update' %}">Редактировать профиль</a>
+                {% if is_current_user %}
+                    <a class="btn btn-primary ml-4" href="{% url 'user:profile-update' %}">Редактировать профиль</a>
+                {% else %}
+                    <a class="btn btn-primary ml-4" href="{% url 'user:subscribe' object.pk %}">Подписаться</a>
+                {% endif %}
             </div>
         </div>
     <div class="row">

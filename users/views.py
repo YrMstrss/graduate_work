@@ -32,9 +32,13 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        user = self.object
-        posts = Publication.objects.filter(author=user)
+        author = self.object
+        user = self.request.user
+        posts = Publication.objects.filter(author=author)
         context['posts'] = posts
+
+        if context['object'] == user:
+            context['is_current_user'] = True
 
         return context
 
