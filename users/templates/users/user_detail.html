@@ -15,14 +15,25 @@
                 {% if is_current_user %}
                     <a class="btn btn-primary ml-4" href="{% url 'user:profile-update' %}">Редактировать профиль</a>
                 {% else %}
-                    <a class="btn btn-primary ml-4" href="{% url 'user:subscribe' object.pk %}">Подписаться</a>
+                    {% if is_subscribed %}
+                        <a class="btn btn-primary ml-4" href="{% url 'user:subscribe' object.pk %}">Отписаться</a>
+                    {% else %}
+                        <a class="btn btn-primary ml-4" href="{% url 'user:subscribe' object.pk %}">Подписаться</a>
+                    {% endif %}
                 {% endif %}
             </div>
+            <div class="col-2">
+                {% for subscription in object.subscriptions.all %}
+                    <p>{{ subscription }}</p>
+                    {% empty %}
+                    <p>нет подписок</p>
+                {% endfor %}
+            </div>
         </div>
-    <div class="row">
-        {% for post in posts %}
-            <p>{{ post }}</p>
-        {% endfor %}
-    </div>
+        <div class="row">
+            {% for post in posts %}
+                <p>{{ post }}</p>
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}

@@ -39,6 +39,9 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
 
         if context['object'] == user:
             context['is_current_user'] = True
+        else:
+            if context['object'] in user.subscriptions.all():
+                context['is_subscribed'] = True
 
         return context
 
@@ -46,14 +49,14 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
 class UserSubscribeView(View):
     def get(self, request, pk):
         author = User.objects.get(pk=pk)
-        user = self.request.user
+        user = request.user
 
         if author in user.subscriptions.all():
             user.subscriptions.remove(author)
         else:
             user.subscriptions.add(author)
 
-        return redirect('users:profile')
+        return redirect(reverse_lazy('user:profile-view', args=[author.pk]))
 
 
 class SubscriptionListView(ListView):
