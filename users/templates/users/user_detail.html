@@ -3,8 +3,13 @@
 {% block content %}
     <div class="container">
         <div class="row">
-            <img src="../../../media/{{ object.avatar }}" width="200" height="222" class="rounded float-start mt-4"
-                 alt="...">
+            {% if object.avatar %}
+                <img src="../../../media/{{ object.avatar }}" width="192" height="256" class="rounded float-start mt-4"
+                     alt="...">
+            {% else %}
+                <img src="../../../media/users/no_avatar.jpg" width="192" height="256" class="rounded float-start mt-4"
+                     alt="...">
+            {% endif %}
             <div class="col-4">
                 <h1 class="mt-4 ml-4">  {{ object.first_name }} {{ object.last_name }}</h1>
                 <ul>
