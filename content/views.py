@@ -82,21 +82,56 @@ class SetLikeView(View):
         try:
             like = Likes.objects.get(user=user, publication=post)
 
-            if like.is_active:
-                like.is_active = False
-                like.save()
-            else:
-                like.is_active = True
-                like.save()
+            try:
+                dislike = Dislikes.objects.get(user=user, publication=post)
+                if dislike.is_active:
+                    dislike.is_active = False
+                    dislike.save()
+                    like.is_active = True
+                    like.save()
+                else:
+                    if like.is_active:
+                        like.is_active = False
+                        like.save()
+                    else:
+                        like.is_active = True
+                        like.save()
+
+            except ObjectDoesNotExist:
+
+                if like.is_active:
+                    like.is_active = False
+                    like.save()
+                else:
+                    like.is_active = True
+                    like.save()
 
         except ObjectDoesNotExist:
-            Likes.objects.create(
-                user=user,
-                publication=post,
-                is_active=True
-            )
+            try:
+                dislike = Dislikes.objects.get(user=user, publication=post)
+                if dislike.is_active:
+                    dislike.is_active = False
+                    dislike.save()
+                    Likes.objects.create(
+                        user=user,
+                        publication=post,
+                        is_active=True
+                    )
+                else:
+                    Likes.objects.create(
+                        user=user,
+                        publication=post,
+                        is_active=True
+                    )
+            except ObjectDoesNotExist:
+                Likes.objects.create(
+                    user=user,
+                    publication=post,
+                    is_active=True
+                )
 
         return redirect(reverse_lazy('publication:publication-detail', args=[post.pk]))
+
 
 class SetDislikeView(View):
     def get(self, request, pk):
@@ -105,18 +140,53 @@ class SetDislikeView(View):
         try:
             dislike = Dislikes.objects.get(user=user, publication=post)
 
-            if dislike.is_active:
-                dislike.is_active = False
-                dislike.save()
-            else:
-                dislike.is_active = True
-                dislike.save()
+            try:
+                like = Likes.objects.get(user=user, publication=post)
+
+                if like.is_active:
+                    like.is_active = False
+                    like.save()
+                    dislike.is_active = True
+                    dislike.save()
+                else:
+                    if dislike.is_active:
+                        dislike.is_active = False
+                        dislike.save()
+                    else:
+                        dislike.is_active = True
+                        dislike.save()
+            except ObjectDoesNotExist:
+
+                if dislike.is_active:
+                    dislike.is_active = False
+                    dislike.save()
+                else:
+                    dislike.is_active = True
+                    dislike.save()
 
         except ObjectDoesNotExist:
-            Dislikes.objects.create(
-                user=user,
-                publication=post,
-                is_active=True
-            )
+            try:
+                like = Likes.objects.get(user=user, publication=post)
+
+                if like.is_active:
+                    like.is_active = False
+                    like.save()
+                    Dislikes.objects.create(
+                        user=user,
+                        publication=post,
+                        is_active=True
+                    )
+                else:
+                    Dislikes.objects.create(
+                        user=user,
+                        publication=post,
+                        is_active=True
+                    )
+            except ObjectDoesNotExist:
+                Dislikes.objects.create(
+                    user=user,
+                    publication=post,
+                    is_active=True
+                )
 
         return redirect(reverse_lazy('publication:publication-detail', args=[post.pk]))
