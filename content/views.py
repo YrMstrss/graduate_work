@@ -6,6 +6,7 @@ from django.views.generic import TemplateView, CreateView, ListView, UpdateView,
 
 from content.forms import PublicationForm
 from content.models import Publication, Likes, Dislikes
+from content.services import toggle_like, toggle_dislike, create_like, create_dislikes
 
 
 class HomePage(TemplateView):
@@ -90,21 +91,11 @@ class SetLikeView(View):
                     like.is_active = True
                     like.save()
                 else:
-                    if like.is_active:
-                        like.is_active = False
-                        like.save()
-                    else:
-                        like.is_active = True
-                        like.save()
+                    toggle_like(like)
 
             except ObjectDoesNotExist:
 
-                if like.is_active:
-                    like.is_active = False
-                    like.save()
-                else:
-                    like.is_active = True
-                    like.save()
+                toggle_like(like)
 
         except ObjectDoesNotExist:
             try:
@@ -112,23 +103,11 @@ class SetLikeView(View):
                 if dislike.is_active:
                     dislike.is_active = False
                     dislike.save()
-                    Likes.objects.create(
-                        user=user,
-                        publication=post,
-                        is_active=True
-                    )
+                    create_like(user, post)
                 else:
-                    Likes.objects.create(
-                        user=user,
-                        publication=post,
-                        is_active=True
-                    )
+                    create_like(user, post)
             except ObjectDoesNotExist:
-                Likes.objects.create(
-                    user=user,
-                    publication=post,
-                    is_active=True
-                )
+                create_like(user, post)
 
         return redirect(reverse_lazy('publication:publication-detail', args=[post.pk]))
 
@@ -149,20 +128,10 @@ class SetDislikeView(View):
                     dislike.is_active = True
                     dislike.save()
                 else:
-                    if dislike.is_active:
-                        dislike.is_active = False
-                        dislike.save()
-                    else:
-                        dislike.is_active = True
-                        dislike.save()
+                    toggle_dislike(dislike)
             except ObjectDoesNotExist:
 
-                if dislike.is_active:
-                    dislike.is_active = False
-                    dislike.save()
-                else:
-                    dislike.is_active = True
-                    dislike.save()
+                toggle_dislike(dislike)
 
         except ObjectDoesNotExist:
             try:
@@ -171,22 +140,10 @@ class SetDislikeView(View):
                 if like.is_active:
                     like.is_active = False
                     like.save()
-                    Dislikes.objects.create(
-                        user=user,
-                        publication=post,
-                        is_active=True
-                    )
+                    create_dislikes(user, post)
                 else:
-                    Dislikes.objects.create(
-                        user=user,
-                        publication=post,
-                        is_active=True
-                    )
+                    create_dislikes(user, post)
             except ObjectDoesNotExist:
-                Dislikes.objects.create(
-                    user=user,
-                    publication=post,
-                    is_active=True
-                )
+                create_dislikes(user, post)
 
         return redirect(reverse_lazy('publication:publication-detail', args=[post.pk]))
