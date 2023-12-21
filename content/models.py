@@ -41,3 +41,16 @@ class Likes(models.Model):
     class Meta:
         verbose_name = 'лайк'
         verbose_name_plural = 'лайки'
+
+
+class Dislikes(models.Model):
+    publication = models.ForeignKey(Publication, on_delete=models.CASCADE, verbose_name='запись')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='кто дизлайкнул')
+    is_active = models.BooleanField(default=False, verbose_name='дизлайк')
+
+    def __str__(self):
+        return f'Дизлайк для публикации {self.publication} от {self.user}'
+
+    class Meta:
+        verbose_name = 'дизлайк'
+        verbose_name_plural = 'дизлайки'
