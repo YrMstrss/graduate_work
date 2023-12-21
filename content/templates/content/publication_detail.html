@@ -25,9 +25,18 @@
                             Лайк
                         </a>
                     {% endif %}
-                    <button type="button" class="btn btn-outline-danger mr-4">
-                        Дизлайк
-                    </button>
+
+                    {% if is_disliked %}
+                        <a type="button" class="btn btn-outline-danger mr-4"
+                           href="{% url 'publication:set-dislike' object.pk %}">
+                            дизлайк есть
+                        </a>
+                    {% else %}
+                        <a type="button" class="btn btn-outline-danger mr-4"
+                           href="{% url 'publication:set-dislike' object.pk %}">
+                            дизлайк
+                        </a>
+                    {% endif %}
                     Просмотры: {{ object.views }}
                 </div>
             </div>
