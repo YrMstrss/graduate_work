@@ -14,9 +14,17 @@
                     <p>{{ object.content }}</p>
                 </div>
                 <div class="card-footer">
-                    <button type="button" class="btn btn-outline-success mr-4">
-                        Лайк
-                    </button>
+                    {% if is_liked %}
+                        <a type="button" class="btn btn-outline-success mr-4"
+                           href="{% url 'publication:set-like' object.pk %}">
+                            Лайк есть
+                        </a>
+                    {% else %}
+                        <a type="button" class="btn btn-outline-success mr-4"
+                           href="{% url 'publication:set-like' object.pk %}">
+                            Лайк
+                        </a>
+                    {% endif %}
                     <button type="button" class="btn btn-outline-danger mr-4">
                         Дизлайк
                     </button>
