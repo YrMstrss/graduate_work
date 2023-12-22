@@ -43,6 +43,9 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
             if context['object'] in user.subscriptions.all():
                 context['is_subscribed'] = True
 
+        subscribers = User.objects.filter(subscriptions=author)
+        context['subscribers'] = subscribers
+
         return context
 
 
