@@ -67,6 +67,12 @@ class PublicationDetailView(DetailView):
         except ObjectDoesNotExist:
             context['is_disliked'] = False
 
+        like_counter = Likes.objects.filter(publication=obj, is_active=True).count()
+        dislike_counter = Dislikes.objects.filter(publication=obj,is_active=True).count()
+
+        context['like_counter'] = like_counter
+        context['dislike_counter'] = dislike_counter
+
         return context
 
 
@@ -109,7 +115,7 @@ class SetLikeView(View):
             except ObjectDoesNotExist:
                 create_like(user, post)
 
-        return redirect(reverse_lazy('publication:publication-detail', args=[post.pk]))
+        return redirect(request.META.get('HTTP_REFERER'))
 
 
 class SetDislikeView(View):
@@ -146,4 +152,4 @@ class SetDislikeView(View):
             except ObjectDoesNotExist:
                 create_dislikes(user, post)
 
-        return redirect(reverse_lazy('publication:publication-detail', args=[post.pk]))
+        return redirect(request.META.get('HTTP_REFERER'))
