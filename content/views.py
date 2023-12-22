@@ -1,4 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import View
@@ -153,3 +154,16 @@ class SetDislikeView(View):
                 create_dislikes(user, post)
 
         return redirect(request.META.get('HTTP_REFERER'))
+
+
+class SearchListView(ListView):
+    model = Publication
+    template_name = 'search_results.html'
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        print(query)
+        object_list = Publication.objects.filter(
+            Q(title__icontains=query) | Q(content__icontains=query)
+        )
+        return object_list

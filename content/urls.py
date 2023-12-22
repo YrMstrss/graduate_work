@@ -2,7 +2,7 @@ from django.urls import path
 
 from content.apps import ContentConfig
 from content.views import PublicationCreateView, PublicationListView, PublicationUpdateView, PublicationDetailView, \
-    SetLikeView, SetDislikeView
+    SetLikeView, SetDislikeView, SearchListView
 
 app_name = ContentConfig.name
 
@@ -14,4 +14,5 @@ urlpatterns = [
 
     path('like/<int:pk>/', SetLikeView.as_view(), name='set-like'),
     path('dislike/<int:pk>/', SetDislikeView.as_view(), name='set-dislike'),
+    path('search-results', SearchListView.as_view(), name='search'),
 ]

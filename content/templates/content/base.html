@@ -111,9 +111,9 @@
             </div>
             <div class="col-2"></div>
             <div class="col-5">
-                <form class="" role="search">
-                    <input type="search" class="form-control form-control-dark text-bg-dark" placeholder="Search..."
-                           aria-label="Search">
+                <form action="{% url 'publication:search' %}" method="get">
+                    <input type="text" class="form-control form-control-dark text-bg-dark" placeholder="Search..."
+                           aria-label="Search" name="q">
                 </form>
             </div>
             <div class="col-1 text-center">
