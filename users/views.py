@@ -49,7 +49,7 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
-class UserSubscribeView(View):
+class UserSubscribeView(LoginRequiredMixin, View):
     def get(self, request, pk):
         author = User.objects.get(pk=pk)
         user = request.user
@@ -62,7 +62,7 @@ class UserSubscribeView(View):
         return redirect(reverse_lazy('user:profile-view', args=[author.pk]))
 
 
-class SubscriptionListView(ListView):
+class SubscriptionListView(LoginRequiredMixin, ListView):
     template_name = 'users/subscriptions.html'
 
     def get_queryset(self, **kwargs):

@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from django.shortcuts import redirect
@@ -14,7 +15,7 @@ class HomePage(TemplateView):
     template_name = 'content/home.html'
 
 
-class PublicationCreateView(CreateView):
+class PublicationCreateView(LoginRequiredMixin, CreateView):
     model = Publication
     form_class = PublicationForm
     success_url = reverse_lazy('home')
@@ -78,13 +79,13 @@ class PublicationDetailView(DetailView):
         return context
 
 
-class PublicationUpdateView(UpdateView):
+class PublicationUpdateView(LoginRequiredMixin, UpdateView):
     model = Publication
     form_class = PublicationForm
     success_url = reverse_lazy('home')
 
 
-class SetLikeView(View):
+class SetLikeView(LoginRequiredMixin, View):
     def get(self, request, pk):
         post = Publication.objects.get(pk=pk)
         user = request.user
@@ -120,7 +121,7 @@ class SetLikeView(View):
         return redirect(request.META.get('HTTP_REFERER'))
 
 
-class SetDislikeView(View):
+class SetDislikeView(LoginRequiredMixin, View):
     def get(self, request, pk):
         post = Publication.objects.get(pk=pk)
         user = request.user
