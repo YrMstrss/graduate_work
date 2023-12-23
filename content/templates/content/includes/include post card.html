@@ -1,0 +1,21 @@
+<div class="card mb-3">
+    <div class="card-header">
+        <a href="{% url 'user:profile-view' object.author_id %}"
+           class="d-block text-gray-dark">{{ object.author }}</a>
+        <p>{{ object.publication_date }}</p>
+    </div>
+    <div class="card-body">
+        <h4>{{ object.title }}</h4>
+        <p>{{ object.content }}</p>
+        <a href="{% url 'publication:publication-detail' object.pk %}">просмотр</a>
+    </div>
+    <div class="card-footer">
+        <button type="button" class="btn btn-outline-success mr-4">
+            Лайк
+        </button>
+        <button type="button" class="btn btn-outline-danger mr-4">
+            Дизлайк
+        </button>
+        Просмотры: {{ object.views }}
+    </div>
+</div>
