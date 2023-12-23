@@ -2,7 +2,8 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path
 
 from users.apps import UsersConfig
-from users.views import RegisterView, ProfileUpdateView, UserSubscribeView, SubscriptionListView, ProfileDetailView
+from users.views import RegisterView, ProfileUpdateView, UserSubscribeView, SubscriptionListView, ProfileDetailView, \
+    OwnProfileDetailView
 
 app_name = UsersConfig.name
 
@@ -14,5 +15,6 @@ urlpatterns = [
     path('profile/<int:pk>', ProfileDetailView.as_view(), name='profile-view'),
     path('subscribe/<int:pk>/', UserSubscribeView.as_view(), name='subscribe'),
     path('subscriptions/', SubscriptionListView.as_view(), name='subscriptions-list'),
+    path('my-profile', OwnProfileDetailView.as_view(), name='my-profile'),
 
 ]

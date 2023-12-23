@@ -49,6 +49,32 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
+class OwnProfileDetailView(DetailView):
+    model = User
+
+    def get_object(self, queryset=None):
+        obj = self.request.user
+        return obj
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        author = self.object
+        user = self.request.user
+        posts = Publication.objects.filter(author=author)
+        context['posts'] = posts
+
+        if context['object'] == user:
+            context['is_current_user'] = True
+        else:
+            if context['object'] in user.subscriptions.all():
+                context['is_subscribed'] = True
+
+        subscribers = User.objects.filter(subscriptions=author)
+        context['subscribers'] = subscribers
+
+        return context
+
+
 class UserSubscribeView(LoginRequiredMixin, View):
     def get(self, request, pk):
         author = User.objects.get(pk=pk)
