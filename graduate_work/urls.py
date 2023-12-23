@@ -19,12 +19,13 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
-from content.views import HomePage
+from content.views import HomePage, NoPermPage
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', HomePage.as_view(), name='home'),
     path('publication/', include('content.urls', namespace='publication')),
     path('user/', include('users.urls', namespace='user')),
+    path('no-permission/', NoPermPage.as_view(), name='no-perm')
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

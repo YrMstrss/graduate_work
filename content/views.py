@@ -15,6 +15,10 @@ class HomePage(TemplateView):
     template_name = 'content/home.html'
 
 
+class NoPermPage(TemplateView):
+    template_name = 'content/have_no_permission.html'
+
+
 class PublicationCreateView(LoginRequiredMixin, CreateView):
     model = Publication
     form_class = PublicationForm
@@ -85,7 +89,16 @@ class PublicationDetailView(DetailView):
 class PublicationUpdateView(LoginRequiredMixin, UpdateView):
     model = Publication
     form_class = PublicationForm
-    success_url = reverse_lazy('home')
+
+    def get(self, request, *args, **kwargs):
+        if request.user == self.get_object().author:
+            self.object = self.get_object()
+            return super().get(request, *args, **kwargs)
+        else:
+            return redirect(reverse_lazy('no-perm'))
+
+    def get_success_url(self):
+        return reverse_lazy('publication:publication-detail', args=[self.object.pk])
 
 
 class SetLikeView(LoginRequiredMixin, View):
