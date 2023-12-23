@@ -40,6 +40,7 @@ class PublicationListView(ListView):
 
 class PublicationDetailView(DetailView):
     model = Publication
+    context_object_name = 'post'
 
     def get_object(self, queryset=None):
 
@@ -78,7 +79,7 @@ class PublicationDetailView(DetailView):
             context['is_disliked'] = False
 
         like_counter = Likes.objects.filter(publication=obj, is_active=True).count()
-        dislike_counter = Dislikes.objects.filter(publication=obj,is_active=True).count()
+        dislike_counter = Dislikes.objects.filter(publication=obj, is_active=True).count()
 
         context['like_counter'] = like_counter
         context['dislike_counter'] = dislike_counter

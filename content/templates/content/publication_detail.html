@@ -5,9 +5,19 @@
         <div class="col-8">
             <div class="card mb-3">
                 <div class="card-header">
-                    <a href="{% url 'user:profile-view' object.author_id %}"
-                       class="d-block text-gray-dark">{{ object.author }}</a>
-                    <p>{{ object.publication_date }}</p>
+                    <div class="row">
+                        <div class="col-9">
+                            <a href="{% url 'user:profile-view' object.author_id %}"
+                               class="d-block text-gray-dark">{{ object.author }}</a>
+                            <p>{{ object.publication_date }} </p>
+                        </div>
+                        {% if user == post.author_id %}
+                            <div class="col-3">
+                                <a href="{% url 'publication:update-publication' object.pk %}"
+                                   class="btn btn-outline-secondary mt-2">Редактировать</a>
+                            </div>
+                        {% endif %}
+                    </div>
                 </div>
                 <div class="card-body">
                     <h4>{{ object.title }}</h4>
