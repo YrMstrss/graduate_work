@@ -19,6 +19,7 @@ class PublicationCreateView(LoginRequiredMixin, CreateView):
     model = Publication
     form_class = PublicationForm
     success_url = reverse_lazy('home')
+    raise_exception = False
 
     def form_valid(self, form):
         self.object = form.save()
@@ -47,6 +48,8 @@ class PublicationDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         user = self.request.user
+        if user.pk is None:
+            return context
         obj = self.get_object()
         try:
             like = Likes.objects.get(user=user, publication=obj)
