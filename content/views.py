@@ -164,6 +164,7 @@ class SetDislikeView(LoginRequiredMixin, View):
 class SearchListView(ListView):
     model = Publication
     template_name = 'content/search_results.html'
+    context_object_name = 'posts'
 
     def get_queryset(self):
         query = self.request.GET.get('q')

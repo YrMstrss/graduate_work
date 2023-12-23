@@ -90,6 +90,8 @@
                 {% if post.is_paid %}
                     {% if post.author in user.subscriptions.all %}
                         {% include 'content/includes/include post card.html' %}
+                    {% elif post.author == user %}
+                        {% include 'content/includes/include post card.html' %}
                     {% else %}
                         {% include 'content/includes/include hidden post card.html' %}
                     {% endif %}
