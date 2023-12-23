@@ -29,6 +29,7 @@ class PublicationCreateView(CreateView):
 
 class PublicationListView(ListView):
     model = Publication
+    context_object_name = 'posts'
 
 
 class PublicationDetailView(DetailView):

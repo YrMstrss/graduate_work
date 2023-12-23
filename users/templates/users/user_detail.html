@@ -87,28 +87,16 @@
             <div class="col-2"></div>
             <div class="col-8 mt-4">
                 {% for post in posts %}
-                    <div class="card mb-3">
-                        <div class="card-header">
-                            <a href="{% url 'user:profile-view' post.author_id %}"
-                               class="d-block text-gray-dark">{{ post.author }}</a>
-                            <p>{{ post.publication_date }}</p>
-                        </div>
-                        <div class="card-body">
-                            <h4>{{ post.title }}</h4>
-                            <p>{{ post.content }}</p>
-                            <a href="{% url 'publication:publication-detail' post.pk %}">просмотр</a>
-                        </div>
-                        <div class="card-footer">
-                            <button type="button" class="btn btn-outline-success mr-4">
-                                Лайк
-                            </button>
-                            <button type="button" class="btn btn-outline-danger mr-4">
-                                Дизлайк
-                            </button>
-                            Просмотры: {{ post.views }}
-                        </div>
-                    </div>
-                {% endfor %}
+                {% if post.is_paid %}
+                    {% if post.author in user.subscriptions.all %}
+                        {% include 'content/includes/include post card.html' %}
+                    {% else %}
+                        {% include 'content/includes/include hidden post card.html' %}
+                    {% endif %}
+                {% else %}
+                    {% include 'content/includes/include post card.html' %}
+                {% endif %}
+            {% endfor %}
             </div>
         </div>
     </div>

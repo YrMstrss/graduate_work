@@ -3,9 +3,9 @@
 {% block content %}
     <div class="my-3 p-3 bg-body rounded shadow-sm">
         <div class="col-8">
-            {% for object in object_list %}
-                {% if object.is_paid %}
-                    {% if object.author in user.subscriptions.all %}
+            {% for post in posts %}
+                {% if post.is_paid %}
+                    {% if post.author in user.subscriptions.all %}
                         {% include 'content/includes/include post card.html' %}
                     {% else %}
                         {% include 'content/includes/include hidden post card.html' %}

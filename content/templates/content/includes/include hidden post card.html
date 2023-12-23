@@ -1,8 +1,8 @@
 <div class="card mb-3">
     <div class="card-header">
-        <a href="{% url 'user:profile-view' object.author_id %}"
-           class="d-block text-gray-dark">{{ object.author }}</a>
-        <p>{{ object.publication_date }}</p>
+        <a href="{% url 'user:profile-view' post.author_id %}"
+           class="d-block text-gray-dark">{{ post.author }}</a>
+        <p>{{ post.publication_date }}</p>
     </div>
     <div class="card-body">
         <h4>{{ object.title }}</h4>
