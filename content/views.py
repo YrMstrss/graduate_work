@@ -158,11 +158,10 @@ class SetDislikeView(View):
 
 class SearchListView(ListView):
     model = Publication
-    template_name = 'search_results.html'
+    template_name = 'content/search_results.html'
 
     def get_queryset(self):
         query = self.request.GET.get('q')
-        print(query)
         object_list = Publication.objects.filter(
             Q(title__icontains=query) | Q(content__icontains=query)
         )
