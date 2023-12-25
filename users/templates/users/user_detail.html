@@ -65,7 +65,7 @@
                     <div class="col-3 ml-2 mr-3">
                         <h3>Подписки</h3>
                         <ul>
-                            {% for subscription in object.subscriptions.all %}
+                            {% for subscription in subscriptions %}
                                 <li><a href="{% url 'user:profile-view' subscription.pk %}">{{ subscription }}</a></li>
                             {% empty %}
                                 <li>нет подписок</li>

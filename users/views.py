@@ -43,8 +43,11 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
             if context['object'] in user.subscriptions.all():
                 context['is_subscribed'] = True
 
-        subscribers = User.objects.filter(subscriptions=author)
+        subscribers = User.objects.filter(subscriptions=author)[:3]
         context['subscribers'] = subscribers
+
+        subscriptions = author.subscriptions.all()[:3]
+        context['subscriptions'] = subscriptions
 
         return context
 
@@ -69,8 +72,11 @@ class OwnProfileDetailView(DetailView):
             if context['object'] in user.subscriptions.all():
                 context['is_subscribed'] = True
 
-        subscribers = User.objects.filter(subscriptions=author)
+        subscribers = User.objects.filter(subscriptions=author)[:3]
         context['subscribers'] = subscribers
+
+        subscriptions = author.subscriptions.all()[:3]
+        context['subscriptions'] = subscriptions
 
         return context
 
@@ -84,6 +90,7 @@ class UserSubscribeView(LoginRequiredMixin, View):
             user.subscriptions.remove(author)
         else:
             user.subscriptions.add(author)
+            redirect(reverse_lazy())
 
         return redirect(reverse_lazy('user:profile-view', args=[author.pk]))
 
