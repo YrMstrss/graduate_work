@@ -3,7 +3,7 @@ from django.contrib.auth.views import LoginView
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import CreateView, UpdateView, ListView, DetailView
+from django.views.generic import CreateView, UpdateView, ListView, DetailView, TemplateView
 
 from content.models import Publication
 from users.forms import UserRegisterForm, UserProfileChangeForm, AuthForm
@@ -96,9 +96,20 @@ class UserSubscribeView(LoginRequiredMixin, View):
             user.subscriptions.remove(author)
         else:
             user.subscriptions.add(author)
-            redirect(reverse_lazy())
 
         return redirect(reverse_lazy('user:profile-view', args=[author.pk]))
+
+
+class SubscribeInfoView(LoginRequiredMixin, TemplateView):
+    template_name = 'users/payment_info.html'
+
+    def get_context_data(self, pk):
+        context = super().get_context_data()
+        obj = User.objects.get(pk=pk)
+
+        context['object'] = obj
+
+        return context
 
 
 class SubscriptionListView(LoginRequiredMixin, ListView):
