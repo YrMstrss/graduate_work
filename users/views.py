@@ -1,11 +1,12 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import CreateView, UpdateView, ListView, DetailView
 
 from content.models import Publication
-from users.forms import UserRegisterForm, UserProfileChangeForm
+from users.forms import UserRegisterForm, UserProfileChangeForm, AuthForm
 from users.models import User
 
 
@@ -14,6 +15,11 @@ class RegisterView(CreateView):
     form_class = UserRegisterForm
     template_name = 'users/register.html'
     success_url = reverse_lazy('home')
+
+
+class Login(LoginView):
+
+    form_class = AuthForm
 
 
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
