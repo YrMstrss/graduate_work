@@ -1,3 +1,5 @@
+import stripe
+from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.shortcuts import redirect
@@ -6,8 +8,12 @@ from django.views import View
 from django.views.generic import CreateView, UpdateView, ListView, DetailView, TemplateView
 
 from content.models import Publication
+from content.services import create_session
 from users.forms import UserRegisterForm, UserProfileChangeForm, AuthForm
 from users.models import User
+
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 class RegisterView(CreateView):
@@ -110,6 +116,14 @@ class SubscribeInfoView(LoginRequiredMixin, TemplateView):
         context['object'] = obj
 
         return context
+
+
+class CreateCheckoutSession(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        instance = User.objects.get(pk=kwargs.get('pk'))
+        checkout_session = create_session(instance)
+
+        return checkout_session
 
 
 class SubscriptionListView(LoginRequiredMixin, ListView):
