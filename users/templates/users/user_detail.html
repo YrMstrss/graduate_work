@@ -55,7 +55,7 @@
                         {% else %}
                             {% if is_subscribed %}
                                 <a class="btn btn-outline-secondary ml-4 mt-2"
-                                   href="{% url 'user:subscribe' object.pk %}">Отписаться</a>
+                                   href="{% url 'user:unsubscribe-info' object.pk %}">Отписаться</a>
                             {% else %}
                                 <a class="btn btn-danger ml-4 mt-2"
                                    href="{% url 'user:subscribe-info' object.pk %}">Подписаться</a>
