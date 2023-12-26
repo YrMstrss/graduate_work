@@ -6,9 +6,12 @@
             Оплата подписки
         </div>
         <div class="card-body">
-            Для подписки на пользователя {{ object.first_name }} {{ object.last_name }} ({{ object.username }}) оплатите
+            Для подписки на пользователя {{ object.username }} оплатите
             подписку
-            <a href="#" class="btn btn-primary">Оплата</a>
+            <form action="{% url 'create-checkout-session' object.pk %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success" id="checkout-button">Оплатить</button>
+            </form>
             <a href="{% url 'user:profile-view' object.pk %}" class="btn btn-danger">Отмена</a>
         </div>
     </div>
