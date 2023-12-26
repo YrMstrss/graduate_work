@@ -9,7 +9,7 @@ class User(AbstractUser):
     city = models.CharField(max_length=100, verbose_name='город', **NULLABLE)
     phone = models.CharField(unique=True, max_length=100, verbose_name='номер телефона')
     avatar = models.ImageField(upload_to='users/', verbose_name='аватар', **NULLABLE)
-    username = models.CharField(max_length=100)
+    username = models.CharField(unique=True, max_length=100)
 
     token = models.CharField(max_length=4, default=None, verbose_name='токен', **NULLABLE)
 
