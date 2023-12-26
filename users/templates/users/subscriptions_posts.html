@@ -1,0 +1,28 @@
+{% extends 'content/base.html' %}
+
+{% block content %}
+    <div class="my-3 p-3 bg-body rounded shadow-sm">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'user:subscriptions-list' %}">Подписки</a>
+            </li>
+            {% for subscription in subscriptions %}
+                {% if subscription.id == object.id %}
+                    <li class="nav-item">
+                        <a class="nav-link active"
+                           href="{% url 'user:subscription-posts' subscription.pk %}">{{ subscription }}</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           href="{% url 'user:subscription-posts' subscription.pk %}">{{ subscription }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+        {% for post in posts %}
+            {% include 'content/includes/include post card.html' %}
+        {% endfor %}
+    </div>
+
+{% endblock %}

@@ -3,7 +3,7 @@ from django.urls import path
 
 from users.apps import UsersConfig
 from users.views import RegisterView, ProfileUpdateView, UserSubscribeView, SubscriptionListView, ProfileDetailView, \
-    OwnProfileDetailView, Login, SubscribeInfoView, UnsubscribeInfoView
+    OwnProfileDetailView, Login, SubscribeInfoView, UnsubscribeInfoView, SubscriptionPublicationView
 
 app_name = UsersConfig.name
 
@@ -18,5 +18,5 @@ urlpatterns = [
     path('my-profile', OwnProfileDetailView.as_view(), name='my-profile'),
     path('subscribe-info/<int:pk>', SubscribeInfoView.as_view(), name='subscribe-info'),
     path('unsubscribe-info/<int:pk>', UnsubscribeInfoView.as_view(), name='unsubscribe-info'),
-
+    path('subscriptions/<int:pk>', SubscriptionPublicationView.as_view(), name='subscription-posts')
 ]

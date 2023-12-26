@@ -159,3 +159,21 @@ class SubscriptionListView(LoginRequiredMixin, ListView):
         context['subscriptions'] = subscriptions
 
         return context
+
+
+class SubscriptionPublicationView(DetailView):
+    model = User
+    template_name = 'users/subscriptions_posts.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        author = self.object
+        posts = Publication.objects.filter(author=author)
+        context['posts'] = posts
+
+        user = self.request.user
+        subscriptions = user.subscriptions.all()
+        context['subscriptions'] = subscriptions
+
+        return context
+
