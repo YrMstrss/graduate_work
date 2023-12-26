@@ -3,13 +3,19 @@
 {% block content %}
     <div class="my-3 p-3 bg-body rounded shadow-sm">
         <h4 class="border-bottom pb-2 mb-0">Мои подписки</h4>
-        {% for subscription in subscriptions %}
-            <div class="d-flex text-body-secondary pt-3">
-                <p class="pb-3 mb-0 lh-sm border-bottom">
-                    <strong><a href="#"
-                               class="d-block text-gray-dark">{{ subscription }}</a></strong>
-                </p>
-            </div>
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active"  href="{% url 'user:subscriptions-list' %}">Подписки</a>
+            </li>
+            {% for subscription in subscriptions %}
+                <li class="nav-item">
+                    <a class="nav-link" href="#">{{ subscription }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+        {% for post in posts %}
+            {% include 'content/includes/include post card.html' %}
         {% endfor %}
+
     </div>
 {% endblock %}
