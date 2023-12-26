@@ -1,5 +1,13 @@
+from django.conf import settings
+from django.http import JsonResponse
+from django.shortcuts import redirect
+
 from content.models import Likes, Dislikes, Publication
 from users.models import User
+
+import stripe
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 def toggle_like(like: Likes):
@@ -34,3 +42,38 @@ def create_dislikes(user: User, post: Publication):
         publication=post,
         is_active=True
     )
+
+
+def create_product(instance: User):
+    product = stripe.Product.create(
+        name=f'{instance.username}'
+    )
+    return product
+
+
+def create_price(instance: User):
+    product = create_product(instance)
+    price = stripe.Price.create(
+        unit_amount=100,
+        currency="usd",
+        recurring={"interval": "month"},
+        product=f"{product.id}",
+    )
+    return price
+
+
+def create_session(instance: User):
+    price = create_price(instance)
+    checkout_session = stripe.checkout.Session.create(
+        line_items=[
+            {
+                'price': f'{price.id}',
+                'quantity': 1,
+            },
+        ],
+        mode='subscription',
+        success_url=f"http://127.0.0.1:8000/user/subscribe/{instance.pk}",
+        cancel_url=f"http://127.0.0.1:8000/user/profile/{instance.pk}",
+    )
+
+    return redirect(checkout_session.url, code=303)
