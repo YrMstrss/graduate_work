@@ -1,0 +1,17 @@
+{% extends 'content/base.html' %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-header">
+            Подтверждение
+        </div>
+        <div class="card-body">
+            Вы собираетесь отменить подписку на пользователя {{ object.username }}.
+            При отмене подписки спасание оплаты за подписку будет остановлено. При повторной подписке будет необходимо
+            снова произвести оплату
+            Вы уверены, что хотите отменить подписку?
+            <a href="{% url 'user:subscribe' object.pk %}" class="btn btn-primary">Отписаться</a>
+            <a href="{% url 'user:profile-view' object.pk %}" class="btn btn-danger">Отмена</a>
+        </div>
+    </div>
+{% endblock %}
