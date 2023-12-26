@@ -118,6 +118,18 @@ class SubscribeInfoView(LoginRequiredMixin, TemplateView):
         return context
 
 
+class UnsubscribeInfoView(LoginRequiredMixin, TemplateView):
+    template_name = 'users/unsubscribe_info.html'
+
+    def get_context_data(self, pk):
+        context = super().get_context_data()
+        obj = User.objects.get(pk=pk)
+
+        context['object'] = obj
+
+        return context
+
+
 class CreateCheckoutSession(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         instance = User.objects.get(pk=kwargs.get('pk'))
