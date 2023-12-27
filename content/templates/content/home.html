@@ -1,13 +1,33 @@
 {% extends 'content/base.html' %}
 
 {% block content %}
-    <div class="col-3">
-        <div class="card mb-4 mt-4 box-shadow">
-            <div class="card-header">
-                <h4 class="my-0 font-weight-normal">title</h4>
+    <div class="d-md-flex flex-md-equal w-100 my-md-3 ps-md-3">
+        <div class="text-bg-dark me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
+            <div class="my-3 py-3">
+                <h2 class="display-5">Самый популярный автор</h2>
+                <p class="lead">{{ the_most_popular_author }}</p>
+                <a href="{% url 'user:profile-view' the_most_popular_author.pk %}">Перейти к автору</a>
             </div>
-            <div class="card-body">
-                <p class="text-center">text</p>
+        </div>
+        <div class="bg-body-tertiary me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
+            <div class="my-3 p-3">
+                <h2 class="display-5">Создайте свой контент</h2>
+                <a class="btn btn-outline-primary" href="{% url 'publication:create-publication' %}">Создать</a>
+            </div>
+        </div>
+    </div>
+    <div class="d-md-flex flex-md-equal w-100 my-md-3 ps-md-3">
+        <div class="text-bg-dark me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
+            <div class="my-3 py-3">
+                <h2 class="display-5">Регистрация</h2>
+                <a class="lead" href="{% url 'user:register' %}">Зарегистрироваться</a>
+            </div>
+        </div>
+        <div class="bg-body-tertiary me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
+            <div class="my-3 p-3">
+                <h2 class="display-5">Самый популярный пост</h2>
+                <p class="lead">{{ the_most_popular_post }}</p>
+                <a href="{% url 'publication:publication-detail' the_most_popular_post.pk %}">К публикации</a>
             </div>
         </div>
     </div>
