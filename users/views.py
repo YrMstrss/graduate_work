@@ -1,5 +1,3 @@
-import stripe
-from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.shortcuts import redirect
@@ -13,10 +11,10 @@ from users.forms import UserRegisterForm, UserProfileChangeForm, AuthForm
 from users.models import User
 
 
-stripe.api_key = settings.STRIPE_SECRET_KEY
-
-
 class RegisterView(CreateView):
+    """
+    Контроллер для регистрации пользователя
+    """
     model = User
     form_class = UserRegisterForm
     template_name = 'users/register.html'
@@ -24,25 +22,49 @@ class RegisterView(CreateView):
 
 
 class Login(LoginView):
+    """
+    Контроллер аутентификации
+    """
 
     form_class = AuthForm
 
 
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
+    """
+    Контроллер для редактирования профиля пользователя
+    """
     model = User
     form_class = UserProfileChangeForm
 
     def get_object(self, queryset=None):
+        """
+        Получает объект текущего пользователя
+        :param queryset: None
+        :return: Текущий пользователь
+        """
         return self.request.user
 
     def get_success_url(self):
+        """
+        Получает ссылку на профиль пользователя при успешном редактировании профиля
+        :return: Ссылка на профиль пользователя
+        """
         return reverse_lazy('user:profile-view', args=[self.object.pk])
 
 
 class ProfileDetailView(LoginRequiredMixin, DetailView):
+    """
+    Контроллер для просмотра профиля пользователя
+    """
     model = User
 
     def get_context_data(self, **kwargs):
+        """
+        Получает контекстную информацию для страницы пользователя
+        :param kwargs:
+        :return: Контекстная информация (все записи пользователя, проверка является ли страница пользователя
+        страницей текущего пользователя, 3 подписки и 3 подписчика пользователя)
+        """
         context = super().get_context_data()
         author = self.object
         user = self.request.user
@@ -65,13 +87,27 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
 
 
 class OwnProfileDetailView(DetailView):
+    """
+    Контроллер просмотра страницы текущего пользователя
+    """
     model = User
 
     def get_object(self, queryset=None):
+        """
+        Получает текущего пользователя
+        :param queryset: None
+        :return: Текущий пользователь (объект User)
+        """
         obj = self.request.user
         return obj
 
     def get_context_data(self, **kwargs):
+        """
+        Получает контекстную информацию для страницы пользователя
+        :param kwargs:
+        :return: Контекстная информация (все записи пользователя, проверка является ли страница пользователя
+        страницей текущего пользователя, 3 подписки и 3 подписчика пользователя)
+        """
         context = super().get_context_data()
         author = self.object
         user = self.request.user
@@ -94,6 +130,9 @@ class OwnProfileDetailView(DetailView):
 
 
 class UserSubscribeView(LoginRequiredMixin, View):
+    """
+    Контроллер для подписки/отписки от пользователя
+    """
     def get(self, request, pk):
         author = User.objects.get(pk=pk)
         user = request.user
@@ -107,6 +146,9 @@ class UserSubscribeView(LoginRequiredMixin, View):
 
 
 class SubscribeInfoView(LoginRequiredMixin, TemplateView):
+    """
+    Контроллер для вывода страницы с информацией об оплате подписки
+    """
     template_name = 'users/payment_info.html'
 
     def get_context_data(self, pk):
@@ -119,6 +161,9 @@ class SubscribeInfoView(LoginRequiredMixin, TemplateView):
 
 
 class UnsubscribeInfoView(LoginRequiredMixin, TemplateView):
+    """
+    Контроллер для вывода страницы с информацией об отписке
+    """
     template_name = 'users/unsubscribe_info.html'
 
     def get_context_data(self, pk):
@@ -131,6 +176,9 @@ class UnsubscribeInfoView(LoginRequiredMixin, TemplateView):
 
 
 class CreateCheckoutSession(LoginRequiredMixin, View):
+    """
+    Контроллер оплаты подписки
+    """
     def post(self, request, *args, **kwargs):
         instance = User.objects.get(pk=kwargs.get('pk'))
         checkout_session = create_session(instance)
@@ -139,6 +187,9 @@ class CreateCheckoutSession(LoginRequiredMixin, View):
 
 
 class SubscriptionListView(LoginRequiredMixin, ListView):
+    """
+    Контроллер для вывода списка подписок
+    """
     template_name = 'users/subscriptions.html'
 
     def get_queryset(self, **kwargs):
@@ -162,6 +213,9 @@ class SubscriptionListView(LoginRequiredMixin, ListView):
 
 
 class SubscriptionPublicationView(DetailView):
+    """
+    Контроллер для вывода записей подписок
+    """
     model = User
     template_name = 'users/subscriptions_posts.html'
 
@@ -174,6 +228,6 @@ class SubscriptionPublicationView(DetailView):
         user = self.request.user
         subscriptions = user.subscriptions.all()
         context['subscriptions'] = subscriptions
+        context['user'] = self.request.user
 
         return context
-

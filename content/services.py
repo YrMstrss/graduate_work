@@ -11,6 +11,11 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 def toggle_like(like: Likes):
+    """
+    Функция переключающая активность лайка
+    :param like: Объект модели Likes
+    :return: None
+    """
     if like.is_active:
         like.is_active = False
         like.save()
@@ -20,6 +25,11 @@ def toggle_like(like: Likes):
 
 
 def toggle_dislike(dislike: Dislikes):
+    """
+    Функция переключающая активность лайка
+    :param dislike: Объект модели Dislikes
+    :return: None
+    """
     if dislike.is_active:
         dislike.is_active = False
         dislike.save()
@@ -29,6 +39,12 @@ def toggle_dislike(dislike: Dislikes):
 
 
 def create_like(user: User, post: Publication):
+    """
+    Функция, создающая объект Likes
+    :param user: Текущий пользователь
+    :param post: Публикация, которой пользователь ставит лайк
+    :return: None
+    """
     Likes.objects.create(
         user=user,
         publication=post,
@@ -37,6 +53,12 @@ def create_like(user: User, post: Publication):
 
 
 def create_dislikes(user: User, post: Publication):
+    """
+    Функция, создающая объект Dislikes
+    :param user: Текущий пользователь
+    :param post: Публикация, которой пользователь ставит дизлайк
+    :return: None
+    """
     Dislikes.objects.create(
         user=user,
         publication=post,
@@ -45,6 +67,11 @@ def create_dislikes(user: User, post: Publication):
 
 
 def create_product(instance: User):
+    """
+    Функция, создающая продукт
+    :param instance: Объект User
+    :return: Объект stripe.Product
+    """
     product = stripe.Product.create(
         name=f'{instance.username}'
     )
@@ -52,6 +79,11 @@ def create_product(instance: User):
 
 
 def create_price(instance: User):
+    """
+    Функция, создающая сущность стоимости продукта
+    :param instance: Объект User
+    :return: Объект stripe.Price
+    """
     product = create_product(instance)
     price = stripe.Price.create(
         unit_amount=100,
@@ -63,6 +95,11 @@ def create_price(instance: User):
 
 
 def create_session(instance: User):
+    """
+    Функция, создающая сессию оплаты товара
+    :param instance: Объект User
+    :return: Ссылка на страницу оплаты
+    """
     price = create_price(instance)
     checkout_session = stripe.checkout.Session.create(
         line_items=[

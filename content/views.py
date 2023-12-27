@@ -12,20 +12,34 @@ from content.services import toggle_like, toggle_dislike, create_like, create_di
 
 
 class HomePage(TemplateView):
+    """
+    Контроллер для вывода домашней страницы
+    """
     template_name = 'content/home.html'
 
 
 class NoPermPage(TemplateView):
+    """
+    Контроллер для вывода страницы с информацией, о том, что у пользователя не хватает прав на какое-то действие
+    """
     template_name = 'content/have_no_permission.html'
 
 
 class PublicationCreateView(LoginRequiredMixin, CreateView):
+    """
+    Контроллер для создания публикации
+    """
     model = Publication
     form_class = PublicationForm
     success_url = reverse_lazy('home')
     raise_exception = False
 
     def form_valid(self, form):
+        """
+        Проверка валидности формы и запись текущего пользователя в поле автора публикации
+        :param form: Форма для создания публикации
+        :return: Проверка валидности формы
+        """
         self.object = form.save()
         self.object.author = self.request.user
         self.object.save()
@@ -34,15 +48,26 @@ class PublicationCreateView(LoginRequiredMixin, CreateView):
 
 
 class PublicationListView(ListView):
+    """
+    Контроллер вывода списка публикаций
+    """
     model = Publication
     context_object_name = 'posts'
 
 
 class PublicationDetailView(DetailView):
+    """
+    Контроллер вывода конкретной записи
+    """
     model = Publication
     context_object_name = 'post'
 
     def get_object(self, queryset=None):
+        """
+        Получает объект публикации и добавляет 1 к счетчику просмотров при переходе на страницу публикации
+        :param queryset: None
+        :return: Публикация
+        """
 
         self.object = super().get_object(queryset)
         self.object.views += 1
@@ -51,6 +76,12 @@ class PublicationDetailView(DetailView):
         return self.object
 
     def get_context_data(self, **kwargs):
+        """
+        Получение контекстной информации на странице объекта
+        :param kwargs:
+        :return: Контекстная информация (счетчик лайков и дизлайков, информацию о том, лайкнул/дизлайкнул ли
+        пользователь запись)
+        """
         context = super().get_context_data()
         user = self.request.user
         if user.pk is None:
@@ -88,10 +119,20 @@ class PublicationDetailView(DetailView):
 
 
 class PublicationUpdateView(LoginRequiredMixin, UpdateView):
+    """
+    Контроллер для редактирования публикации
+    """
     model = Publication
     form_class = PublicationForm
 
     def get(self, request, *args, **kwargs):
+        """
+        Проверяет, является ли текущий пользователь автором публикации
+        :param request:
+        :param args:
+        :param kwargs:
+        :return: Редирект на страницу с информацией о тои, что пользователь не может совершить данное действие
+        """
         if request.user == self.get_object().author:
             self.object = self.get_object()
             return super().get(request, *args, **kwargs)
@@ -99,11 +140,25 @@ class PublicationUpdateView(LoginRequiredMixin, UpdateView):
             return redirect(reverse_lazy('no-perm'))
 
     def get_success_url(self):
+        """
+        Получает ссылку для перенаправления пользователя на страницу публикации после успешного редактирования поста
+        :return: Ссылка на страницу публикации
+        """
         return reverse_lazy('publication:publication-detail', args=[self.object.pk])
 
 
 class SetLikeView(LoginRequiredMixin, View):
+    """
+    Контроллер, чтобы поставить лайк
+    """
     def get(self, request, pk):
+        """
+        Проверяет существования объекта лайка для заданной публикации от текущего пользователя. При его отсутствии
+        создает его, при его существовании изменяет поле активности лайка
+        :param request:
+        :param pk: ID записи
+        :return: Редирект на предыдущую страницу
+        """
         post = Publication.objects.get(pk=pk)
         user = request.user
         try:
@@ -139,7 +194,17 @@ class SetLikeView(LoginRequiredMixin, View):
 
 
 class SetDislikeView(LoginRequiredMixin, View):
+    """
+    Контроллер, чтобы поставить дизлайк
+    """
     def get(self, request, pk):
+        """
+        Проверяет существования объекта дизлайка для заданной публикации от текущего пользователя. При его отсутствии
+        создает его, при его существовании изменяет поле активности дизлайка
+        :param request:
+        :param pk: ID записи
+        :return: Редирект на предыдущую страницу
+        """
         post = Publication.objects.get(pk=pk)
         user = request.user
         try:
@@ -176,11 +241,18 @@ class SetDislikeView(LoginRequiredMixin, View):
 
 
 class SearchListView(ListView):
+    """
+    Контроллер поисковой строки
+    """
     model = Publication
     template_name = 'content/search_results.html'
     context_object_name = 'posts'
 
     def get_queryset(self):
+        """
+        Получает все записи в названии или содержании которых есть запрос из поисковой строки
+        :return: Список подходящих записей
+        """
         query = self.request.GET.get('q')
         object_list = Publication.objects.filter(
             Q(title__icontains=query) | Q(content__icontains=query)

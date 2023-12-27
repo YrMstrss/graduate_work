@@ -6,6 +6,9 @@ from users.models import User
 
 
 class UserRegisterForm(StyleFormMixin, UserCreationForm):
+    """
+    Форма для регистрации пользователя
+    """
 
     class Meta:
         model = User
@@ -13,6 +16,9 @@ class UserRegisterForm(StyleFormMixin, UserCreationForm):
 
 
 class UserProfileChangeForm(StyleFormMixin, UserChangeForm):
+    """
+    Форма для редактирования профиля пользователя
+    """
 
     class Meta:
         model = User
@@ -25,4 +31,7 @@ class UserProfileChangeForm(StyleFormMixin, UserChangeForm):
 
 
 class AuthForm(StyleFormMixin, AuthenticationForm):
+    """
+    Форма авторизации
+    """
     pass
