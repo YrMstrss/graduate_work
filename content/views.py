@@ -45,8 +45,6 @@ class HomePage(TemplateView):
         return context
 
 
-
-
 class NoPermPage(TemplateView):
     """
     Контроллер для вывода страницы с информацией, о том, что у пользователя не хватает прав на какое-то действие
@@ -274,7 +272,7 @@ class SearchListView(ListView):
     Контроллер поисковой строки
     """
     model = Publication
-    template_name = 'content/search_results.html'
+    template_name = 'content/publication_list.html'
     context_object_name = 'posts'
 
     def get_queryset(self):

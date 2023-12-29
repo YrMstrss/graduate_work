@@ -1,13 +1,13 @@
 <div class="card mb-3">
     <div class="card-header">
         <div class="row">
-            <div class="col-9">
+            <div class="col-8">
                 <a href="{% url 'user:profile-view' post.author_id %}"
                    class="d-block text-gray-dark">{{ post.author }}</a>
                 <p>{{ post.publication_date }} </p>
             </div>
             {% if user == post.author %}
-                <div class="col-3">
+                <div class="col-4">
                     <a href="{% url 'publication:update-publication' post.pk %}"
                        class="btn btn-outline-secondary mt-2">Редактировать</a>
                 </div>
@@ -20,6 +20,7 @@
         <a href="{% url 'publication:publication-detail' post.pk %}">просмотр</a>
     </div>
     <div class="card-footer">
-        Просмотры: {{ post.views }}
+        {% include 'content/includes/svg/eye.html' %}
+        {{ post.views }}
     </div>
 </div>
