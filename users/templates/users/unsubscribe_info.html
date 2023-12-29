@@ -1,15 +1,15 @@
 {% extends 'content/base.html' %}
 
 {% block content %}
-    <div class="card">
+    <div class="card text-center mt-4">
         <div class="card-header">
-            Подтверждение
+            <h3>Подтверждение</h3>
         </div>
         <div class="card-body">
-            Вы собираетесь отменить подписку на пользователя {{ object.username }}.
-            При отмене подписки спасание оплаты за подписку будет остановлено. При повторной подписке будет необходимо
-            снова произвести оплату
-            Вы уверены, что хотите отменить подписку?
+            <p class="lead">Вы собираетесь отменить подписку на пользователя {{ object.username }}.
+            При отмене подписки списание оплаты за подписку будет остановлено. При повторной подписке будет необходимо
+            снова произвести оплату</p>
+            <p class="lead">Вы уверены, что хотите отменить подписку?</p>
             <a href="{% url 'user:subscribe' object.pk %}" class="btn btn-primary">Отписаться</a>
             <a href="{% url 'user:profile-view' object.pk %}" class="btn btn-danger">Отмена</a>
         </div>
