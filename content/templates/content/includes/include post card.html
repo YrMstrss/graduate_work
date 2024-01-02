@@ -10,7 +10,8 @@
                 <div class="col-2"></div>
                 <div class="col-2">
                     <div class="dropdown">
-                        <button class="btn btn-outline-secondary dropdown-toggle mt-2" type="button" id="dropdownMenuButton1"
+                        <button class="btn btn-outline-secondary dropdown-toggle mt-2" type="button"
+                                id="dropdownMenuButton1"
                                 data-bs-toggle="dropdown" aria-expanded="false">
                             {% include 'content/includes/svg/three_points.html' %}
                         </button>
@@ -39,6 +40,36 @@
         <a href="{% url 'publication:publication-detail' post.pk %}">просмотр</a>
     </div>
     <div class="card-footer">
+        {% for like in post.like_set.all %}
+            {% if like.user == user %}
+                {% if like.is_active %}
+                    <a type="button" class="btn btn-success mr-4"
+                       href="{% url 'publication:set-like' post.pk %}">
+                        {% include 'content/includes/svg/heart-fill.html' %}
+                    </a>
+                {% else %}
+                    <a type="button" class="btn btn-outline-success mr-4"
+                       href="{% url 'publication:set-like' post.pk %}">
+                        {% include 'content/includes/svg/heart.html' %}
+                    </a>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+        {% for dislike in post.dislike_set.all %}
+            {% if dislike.user == user %}
+                {% if dislike.is_active %}
+                    <a type="button" class="btn btn-danger mr-4"
+                       href="{% url 'publication:set-dislike' post.pk %}">
+                        {% include 'content/includes/svg/heart-broken-fill.html' %}
+                    </a>
+                {% else %}
+                    <a type="button" class="btn btn-outline-danger mr-4"
+                       href="{% url 'publication:set-dislike' post.pk %}">
+                        {% include 'content/includes/svg/heart-broken.html' %}
+                    </a>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
         {% include 'content/includes/svg/eye.html' %}
         {{ post.views }}
     </div>
