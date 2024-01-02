@@ -70,6 +70,12 @@ class PublicationCreateView(LoginRequiredMixin, CreateView):
         self.object.author = self.request.user
         self.object.save()
 
+        users = User.objects.all()
+
+        for user in users:
+            Like.objects.create(user=user, publication=self.object)
+            Dislike.objects.create(user=user, publication=self.object)
+
         return super().form_valid(form)
 
     def get_success_url(self):
