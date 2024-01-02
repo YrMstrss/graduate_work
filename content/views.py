@@ -4,7 +4,7 @@ from django.db.models import Q
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import TemplateView, CreateView, ListView, UpdateView, DetailView
+from django.views.generic import TemplateView, CreateView, ListView, UpdateView, DetailView, DeleteView
 
 from content.forms import PublicationForm
 from content.models import Publication, Like, Dislike
@@ -172,6 +172,31 @@ class PublicationUpdateView(LoginRequiredMixin, UpdateView):
         :return: Ссылка на страницу публикации
         """
         return reverse_lazy('publication:publication-detail', args=[self.object.pk])
+
+
+class PublicationDeleteView(DeleteView):
+    model = Publication
+
+    def get(self, request, *args, **kwargs):
+        """
+        Проверяет, является ли текущий пользователь автором публикации
+        :param request:
+        :param args:
+        :param kwargs:
+        :return: Редирект на страницу с информацией о тои, что пользователь не может совершить данное действие
+        """
+        if request.user == self.get_object().author:
+            self.object = self.get_object()
+            return super().get(request, *args, **kwargs)
+        else:
+            return redirect(reverse_lazy('no-perm'))
+
+    def get_success_url(self):
+        """
+        Получает ссылку для перенаправления пользователя на страницу публикации после успешного редактирования поста
+        :return: Ссылка на страницу публикации
+        """
+        return reverse_lazy('publication:list-publications')
 
 
 class SetLikeView(LoginRequiredMixin, View):

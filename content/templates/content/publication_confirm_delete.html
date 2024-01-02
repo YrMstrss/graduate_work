@@ -1,0 +1,28 @@
+{% extends 'content/base.html' %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-6 mt-4">
+            <div class="modal-content rounded-4 shadow">
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <div class="modal-header border-bottom-0">
+                            <h1 class="modal-title fs-5">Удаление</h1>
+                        </div>
+                        <div class="modal-body py-0">
+                            <p>Вы уверены, что хотите удалить эту запись ({{ object }})?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-outline-danger">Удалить</button>
+                            <a href="{% url 'publication:list-publications' %}" type="button"
+                               class="btn btn-outline-secondary">Отмена</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

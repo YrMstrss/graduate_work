@@ -2,7 +2,7 @@ from django.urls import path
 
 from content.apps import ContentConfig
 from content.views import PublicationCreateView, PublicationListView, PublicationUpdateView, PublicationDetailView, \
-    SetLikeView, SetDislikeView, SearchListView
+    SetLikeView, SetDislikeView, SearchListView, PublicationDeleteView
 
 app_name = ContentConfig.name
 
@@ -11,6 +11,7 @@ urlpatterns = [
     path('', PublicationListView.as_view(), name='list-publications'),
     path('update/<int:pk>/', PublicationUpdateView.as_view(), name='update-publication'),
     path('<int:pk>/', PublicationDetailView.as_view(), name='publication-detail'),
+    path('delete/<int:pk>/', PublicationDeleteView.as_view(), name='delete-publication'),
 
     path('like/<int:pk>/', SetLikeView.as_view(), name='set-like'),
     path('dislike/<int:pk>/', SetDislikeView.as_view(), name='set-dislike'),
