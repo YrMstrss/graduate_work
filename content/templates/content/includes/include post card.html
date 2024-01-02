@@ -7,9 +7,28 @@
                 <p>{{ post.publication_date }} </p>
             </div>
             {% if user == post.author %}
-                <div class="col-4">
-                    <a href="{% url 'publication:update-publication' post.pk %}"
-                       class="btn btn-outline-secondary mt-2">Редактировать</a>
+                <div class="col-2"></div>
+                <div class="col-2">
+                    <div class="dropdown">
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                            {% include 'content/includes/svg/three_points.html' %}
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li class="nav-item">
+                                <a href="{% url 'publication:update-publication' post.pk %}"
+                                   class="nav-link text-secondary" aria-current="page">
+                                    Редактировать
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{% url 'publication:delete-publication' post.pk %}"
+                                   class="nav-link text-danger" aria-current="page">
+                                    Удалить
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             {% endif %}
         </div>
