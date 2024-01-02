@@ -58,7 +58,6 @@ class PublicationCreateView(LoginRequiredMixin, CreateView):
     """
     model = Publication
     form_class = PublicationForm
-    success_url = reverse_lazy('home')
     raise_exception = False
 
     def form_valid(self, form):
@@ -72,6 +71,13 @@ class PublicationCreateView(LoginRequiredMixin, CreateView):
         self.object.save()
 
         return super().form_valid(form)
+
+    def get_success_url(self):
+        """
+        Получает ссылку для перенаправления пользователя на страницу публикации после успешного создания поста
+        :return: Ссылка на страницу публикации
+        """
+        return reverse_lazy('publication:publication-detail', args=[self.object.pk])
 
 
 class PublicationListView(ListView):
