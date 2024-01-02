@@ -1,8 +1,7 @@
 from django.conf import settings
-from django.http import JsonResponse
 from django.shortcuts import redirect
 
-from content.models import Likes, Dislikes, Publication
+from content.models import Like, Dislike, Publication
 from users.models import User
 
 import stripe
@@ -10,10 +9,10 @@ import stripe
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
-def toggle_like(like: Likes):
+def toggle_like(like: Like):
     """
     Функция переключающая активность лайка
-    :param like: Объект модели Likes
+    :param like: Объект модели Like
     :return: None
     """
     if like.is_active:
@@ -24,10 +23,10 @@ def toggle_like(like: Likes):
         like.save()
 
 
-def toggle_dislike(dislike: Dislikes):
+def toggle_dislike(dislike: Dislike):
     """
     Функция переключающая активность лайка
-    :param dislike: Объект модели Dislikes
+    :param dislike: Объект модели Dislike
     :return: None
     """
     if dislike.is_active:
@@ -40,26 +39,26 @@ def toggle_dislike(dislike: Dislikes):
 
 def create_like(user: User, post: Publication):
     """
-    Функция, создающая объект Likes
+    Функция, создающая объект Like
     :param user: Текущий пользователь
     :param post: Публикация, которой пользователь ставит лайк
     :return: None
     """
-    Likes.objects.create(
+    Like.objects.create(
         user=user,
         publication=post,
         is_active=True
     )
 
 
-def create_dislikes(user: User, post: Publication):
+def create_dislike(user: User, post: Publication):
     """
-    Функция, создающая объект Dislikes
+    Функция, создающая объект Dislike
     :param user: Текущий пользователь
     :param post: Публикация, которой пользователь ставит дизлайк
     :return: None
     """
-    Dislikes.objects.create(
+    Dislike.objects.create(
         user=user,
         publication=post,
         is_active=True

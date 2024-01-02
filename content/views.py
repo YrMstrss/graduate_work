@@ -7,8 +7,8 @@ from django.views import View
 from django.views.generic import TemplateView, CreateView, ListView, UpdateView, DetailView
 
 from content.forms import PublicationForm
-from content.models import Publication, Likes, Dislikes
-from content.services import toggle_like, toggle_dislike, create_like, create_dislikes
+from content.models import Publication, Like, Dislike
+from content.services import toggle_like, toggle_dislike, create_like, create_dislike
 from users.models import User
 
 
@@ -115,7 +115,7 @@ class PublicationDetailView(DetailView):
             return context
         obj = self.get_object()
         try:
-            like = Likes.objects.get(user=user, publication=obj)
+            like = Like.objects.get(user=user, publication=obj)
 
             if like.is_active:
                 context['is_liked'] = True
@@ -126,7 +126,7 @@ class PublicationDetailView(DetailView):
             context['is_liked'] = False
 
         try:
-            dislike = Dislikes.objects.get(user=user, publication=obj)
+            dislike = Dislike.objects.get(user=user, publication=obj)
 
             if dislike.is_active:
                 context['is_disliked'] = True
@@ -136,8 +136,8 @@ class PublicationDetailView(DetailView):
         except ObjectDoesNotExist:
             context['is_disliked'] = False
 
-        like_counter = Likes.objects.filter(publication=obj, is_active=True).count()
-        dislike_counter = Dislikes.objects.filter(publication=obj, is_active=True).count()
+        like_counter = Like.objects.filter(publication=obj, is_active=True).count()
+        dislike_counter = Dislike.objects.filter(publication=obj, is_active=True).count()
 
         context['like_counter'] = like_counter
         context['dislike_counter'] = dislike_counter
@@ -189,10 +189,10 @@ class SetLikeView(LoginRequiredMixin, View):
         post = Publication.objects.get(pk=pk)
         user = request.user
         try:
-            like = Likes.objects.get(user=user, publication=post)
+            like = Like.objects.get(user=user, publication=post)
 
             try:
-                dislike = Dislikes.objects.get(user=user, publication=post)
+                dislike = Dislike.objects.get(user=user, publication=post)
                 if dislike.is_active:
                     dislike.is_active = False
                     dislike.save()
@@ -207,7 +207,7 @@ class SetLikeView(LoginRequiredMixin, View):
 
         except ObjectDoesNotExist:
             try:
-                dislike = Dislikes.objects.get(user=user, publication=post)
+                dislike = Dislike.objects.get(user=user, publication=post)
                 if dislike.is_active:
                     dislike.is_active = False
                     dislike.save()
@@ -235,10 +235,10 @@ class SetDislikeView(LoginRequiredMixin, View):
         post = Publication.objects.get(pk=pk)
         user = request.user
         try:
-            dislike = Dislikes.objects.get(user=user, publication=post)
+            dislike = Dislike.objects.get(user=user, publication=post)
 
             try:
-                like = Likes.objects.get(user=user, publication=post)
+                like = Like.objects.get(user=user, publication=post)
 
                 if like.is_active:
                     like.is_active = False
@@ -253,16 +253,16 @@ class SetDislikeView(LoginRequiredMixin, View):
 
         except ObjectDoesNotExist:
             try:
-                like = Likes.objects.get(user=user, publication=post)
+                like = Like.objects.get(user=user, publication=post)
 
                 if like.is_active:
                     like.is_active = False
                     like.save()
-                    create_dislikes(user, post)
+                    create_dislike(user, post)
                 else:
-                    create_dislikes(user, post)
+                    create_dislike(user, post)
             except ObjectDoesNotExist:
-                create_dislikes(user, post)
+                create_dislike(user, post)
 
         return redirect(request.META.get('HTTP_REFERER'))
 

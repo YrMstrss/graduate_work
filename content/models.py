@@ -23,7 +23,7 @@ class Publication(models.Model):
         verbose_name_plural = 'Публикации'
 
 
-class Likes(models.Model):
+class Like(models.Model):
     publication = models.ForeignKey(Publication, on_delete=models.CASCADE, verbose_name='запись')
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='кто лайкнул')
     is_active = models.BooleanField(default=False, verbose_name='лайк')
@@ -36,7 +36,7 @@ class Likes(models.Model):
         verbose_name_plural = 'лайки'
 
 
-class Dislikes(models.Model):
+class Dislike(models.Model):
     publication = models.ForeignKey(Publication, on_delete=models.CASCADE, verbose_name='запись')
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='кто дизлайкнул')
     is_active = models.BooleanField(default=False, verbose_name='дизлайк')
