@@ -8,7 +8,7 @@ from django.views.generic import TemplateView, CreateView, ListView, UpdateView,
 
 from content.forms import PublicationForm
 from content.models import Publication, Like, Dislike
-from content.services import toggle_like, toggle_dislike, create_like, create_dislike
+from content.services import toggle_like, toggle_dislike
 from users.models import User
 
 
@@ -188,34 +188,14 @@ class SetLikeView(LoginRequiredMixin, View):
         """
         post = Publication.objects.get(pk=pk)
         user = request.user
-        try:
-            like = Like.objects.get(user=user, publication=post)
+        like = Like.objects.get_or_create(user=user, publication=post)[0]
+        dislike = Dislike.objects.get_or_create(user=user, publication=post)[0]
 
-            try:
-                dislike = Dislike.objects.get(user=user, publication=post)
-                if dislike.is_active:
-                    dislike.is_active = False
-                    dislike.save()
-                    like.is_active = True
-                    like.save()
-                else:
-                    toggle_like(like)
-
-            except ObjectDoesNotExist:
-
-                toggle_like(like)
-
-        except ObjectDoesNotExist:
-            try:
-                dislike = Dislike.objects.get(user=user, publication=post)
-                if dislike.is_active:
-                    dislike.is_active = False
-                    dislike.save()
-                    create_like(user, post)
-                else:
-                    create_like(user, post)
-            except ObjectDoesNotExist:
-                create_like(user, post)
+        if dislike.is_active:
+            toggle_dislike(dislike)
+            toggle_like(like)
+        else:
+            toggle_like(like)
 
         return redirect(request.META.get('HTTP_REFERER'))
 
@@ -234,35 +214,14 @@ class SetDislikeView(LoginRequiredMixin, View):
         """
         post = Publication.objects.get(pk=pk)
         user = request.user
-        try:
-            dislike = Dislike.objects.get(user=user, publication=post)
+        dislike = Dislike.objects.get_or_create(user=user, publication=post)[0]
+        like = Like.objects.get_or_create(user=user, publication=post)[0]
 
-            try:
-                like = Like.objects.get(user=user, publication=post)
-
-                if like.is_active:
-                    like.is_active = False
-                    like.save()
-                    dislike.is_active = True
-                    dislike.save()
-                else:
-                    toggle_dislike(dislike)
-            except ObjectDoesNotExist:
-
-                toggle_dislike(dislike)
-
-        except ObjectDoesNotExist:
-            try:
-                like = Like.objects.get(user=user, publication=post)
-
-                if like.is_active:
-                    like.is_active = False
-                    like.save()
-                    create_dislike(user, post)
-                else:
-                    create_dislike(user, post)
-            except ObjectDoesNotExist:
-                create_dislike(user, post)
+        if like.is_active:
+            toggle_like(like)
+            toggle_dislike(dislike)
+        else:
+            toggle_dislike(dislike)
 
         return redirect(request.META.get('HTTP_REFERER'))
 

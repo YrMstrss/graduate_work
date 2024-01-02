@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.shortcuts import redirect
 
-from content.models import Like, Dislike, Publication
+from content.models import Like, Dislike
 from users.models import User
 
 import stripe
@@ -35,34 +35,6 @@ def toggle_dislike(dislike: Dislike):
     else:
         dislike.is_active = True
         dislike.save()
-
-
-def create_like(user: User, post: Publication):
-    """
-    Функция, создающая объект Like
-    :param user: Текущий пользователь
-    :param post: Публикация, которой пользователь ставит лайк
-    :return: None
-    """
-    Like.objects.create(
-        user=user,
-        publication=post,
-        is_active=True
-    )
-
-
-def create_dislike(user: User, post: Publication):
-    """
-    Функция, создающая объект Dislike
-    :param user: Текущий пользователь
-    :param post: Публикация, которой пользователь ставит дизлайк
-    :return: None
-    """
-    Dislike.objects.create(
-        user=user,
-        publication=post,
-        is_active=True
-    )
 
 
 def create_product(instance: User):
