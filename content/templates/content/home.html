@@ -6,7 +6,9 @@
             <div class="my-3 py-3">
                 <h2 class="display-5">Самый популярный автор</h2>
                 <p class="lead">{{ the_most_popular_author }}</p>
-                <a href="{% url 'user:profile-view' the_most_popular_author.pk %}">Перейти к автору</a>
+                {% if the_most_popular_author %}
+                    <a href="{% url 'user:profile-view' the_most_popular_author.pk %}">Перейти к автору</a>
+                {% endif %}
             </div>
         </div>
         <div class="col-4 text-bg-dark me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
@@ -27,7 +29,9 @@
             <div class="my-3 p-3">
                 <h2 class="display-5">Самый популярный пост</h2>
                 <p class="lead">{{ the_most_popular_post }}</p>
-                <a href="{% url 'publication:publication-detail' the_most_popular_post.pk %}">К публикации</a>
+                {% if the_most_popular_post %}
+                    <a href="{% url 'publication:publication-detail' the_most_popular_post.pk %}">К публикации</a>
+                {% endif %}
             </div>
         </div>
     </div>

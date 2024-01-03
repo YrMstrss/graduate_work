@@ -27,20 +27,22 @@ class HomePage(TemplateView):
         context = super().get_context_data(**kwargs)
 
         users = User.objects.all()
-        the_most_popular_author = None
-        prev_subscriber_counter = 0
-        for author in users:
-            subscriber_counter = 0
-            for user in users:
-                if author in user.subscriptions.all():
-                    subscriber_counter += 1
-            if subscriber_counter > prev_subscriber_counter:
-                prev_subscriber_counter = subscriber_counter
-                the_most_popular_author = author
-        context['the_most_popular_author'] = the_most_popular_author
+        if users.count() > 1:
+            the_most_popular_author = None
+            prev_subscriber_counter = 0
+            for author in users:
+                subscriber_counter = 0
+                for user in users:
+                    if author in user.subscriptions.all():
+                        subscriber_counter += 1
+                if subscriber_counter > prev_subscriber_counter:
+                    prev_subscriber_counter = subscriber_counter
+                    the_most_popular_author = author
+            context['the_most_popular_author'] = the_most_popular_author
 
-        the_most_popular_post = Publication.objects.order_by('-views')
-        context['the_most_popular_post'] = the_most_popular_post[0]
+        posts = Publication.objects.order_by('-views')
+        if posts:
+            context['the_most_popular_post'] = posts[0]
 
         return context
 
