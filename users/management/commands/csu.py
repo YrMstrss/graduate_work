@@ -1,4 +1,5 @@
 from django.core.management import BaseCommand
+from django.db import IntegrityError
 
 from users.models import User
 
@@ -9,13 +10,16 @@ class Command(BaseCommand):
     """
 
     def handle(self, *args, **options):
-        user = User.objects.create(
-            phone='88008008080',
-            first_name='Admin',
-            last_name='Content',
-            is_staff=True,
-            is_superuser=True
-        )
+        try:
+            user = User.objects.create(
+                phone='88008008080',
+                first_name='Admin',
+                last_name='Content',
+                is_staff=True,
+                is_superuser=True
+            )
 
-        user.set_password('password')
-        user.save()
+            user.set_password('password')
+            user.save()
+        except IntegrityError:
+            pass
