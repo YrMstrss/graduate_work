@@ -40,4 +40,3 @@ class UserTestCase(TestCase):
         self.assertIn('Test2 Testov', response.content.decode())
         self.assertIn('Testov Test', response.content.decode())
         self.assertIn('нет подписчиков', response.content.decode())
-
