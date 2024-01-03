@@ -47,17 +47,3 @@ class Dislike(models.Model):
     class Meta:
         verbose_name = 'дизлайк'
         verbose_name_plural = 'дизлайки'
-
-
-class Comments(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='автор комментария')
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name='время создания')
-    content = models.TextField(verbose_name='содержимое')
-    post = models.ForeignKey(Publication, on_delete=models.CASCADE, verbose_name='запись')
-
-    def __str__(self):
-        return f'Комментарий от {self.author} к записи {self.post} от {self.created_at}'
-
-    class Meta:
-        verbose_name = 'комментарий'
-        verbose_name_plural = 'комментарии'
