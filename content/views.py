@@ -127,7 +127,8 @@ class PublicationDetailView(DetailView):
         user = self.request.user
         if user.pk is None:
             return context
-        obj = self.get_object()
+
+        obj = self.object
         try:
             like = Like.objects.get(user=user, publication=obj)
 
