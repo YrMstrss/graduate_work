@@ -1,7 +1,7 @@
 <div class="card mb-3">
     <div class="card-header">
         <a href="{% url 'user:profile-view' post.author_id %}"
-           class="d-block text-gray-dark">{{ post.author }}</a>
+           class="d-block text-gray-dark">{{ post.author.username }}</a>
         <p>{{ post.publication_date }}</p>
     </div>
     <div class="card-body">

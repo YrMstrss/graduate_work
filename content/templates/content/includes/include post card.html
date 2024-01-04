@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-8">
                 <a href="{% url 'user:profile-view' post.author_id %}"
-                   class="d-block text-gray-dark">{{ post.author }}</a>
+                   class="d-block text-gray-dark">{{ post.author.username }}</a>
                 <p>{{ post.publication_date }} </p>
             </div>
             {% if user == post.author %}
