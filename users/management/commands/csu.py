@@ -15,6 +15,7 @@ class Command(BaseCommand):
                 phone='88008008080',
                 first_name='Admin',
                 last_name='Content',
+                username='admin',
                 is_staff=True,
                 is_superuser=True
             )
